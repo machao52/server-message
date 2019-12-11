@@ -1,0 +1,7 @@
+spring:
+  message:
+    encoding: UTF-8
+
+#配置启动的端口号
+server:
+  port: 8080
