@@ -1,4 +1,4 @@
-package org.mc.study.server.message.controller;
+package org.mc.study.server.message.netty.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;

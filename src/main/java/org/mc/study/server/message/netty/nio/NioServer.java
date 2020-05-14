@@ -1,4 +1,4 @@
-package org.mc.study.server.message.nio;
+package org.mc.study.server.message.netty.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
