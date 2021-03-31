@@ -3,11 +3,13 @@ package org.mc.study.server.message.netty;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
+import io.netty.util.AttributeKey;
 
 /**
  * @author machao
@@ -36,6 +38,14 @@ public class NettyServer {
                     }
                 })
                 .bind(6000);
+
+        serverBootstrap.attr(AttributeKey.newInstance("serverName"), "nettyServer");
+        serverBootstrap.childAttr(AttributeKey.newInstance("clientKey"), "clientValue");
+        serverBootstrap.childOption(ChannelOption.TCP_NODELAY, true)
+                .childOption(ChannelOption.SO_KEEPALIVE, true);
+        serverBootstrap.option(ChannelOption.SO_BACKLOG, 1024);
+        System.out.println();
+
     }
 
 }

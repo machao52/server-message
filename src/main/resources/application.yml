@@ -8,7 +8,7 @@ spring:
     producer:
       ## 当retries为0时，produce不会重复。retires重发，此时replication节点完全成为leader节点，不会产生消息丢失。
       retries: 0
-      batch-size: 16000
+      batch-size: 16384
       # produce积累数据一次发送，缓存大小达到buffer.memory就发送数据
       buffer-memory: 300000
       #procedure要求leader在考虑完成请求之前收到的确认数，用于控制发送记录在服务端的持久化，其值可以为如下：
