@@ -1,41 +1,34 @@
 package org.mc.study.server.message.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
 
 /**
  * @author machao
- * @date 2019-12-11
+ * @date 2021/03/31
  */
 public class NettyServer {
 
     public static void main(String[] args) {
+
         ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-        NioEventLoopGroup boss = new NioEventLoopGroup();
-        NioEventLoopGroup worker = new NioEventLoopGroup();
+        NioEventLoopGroup bossGroup = new NioEventLoopGroup();
+        NioEventLoopGroup workGroup = new NioEventLoopGroup();
 
-        serverBootstrap.group(boss, worker)
+        serverBootstrap.group(bossGroup, workGroup)
                 .channel(NioServerSocketChannel.class)
-                .childHandler(new ChannelInitializer<NioSocketChannel>() {
+                .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
-                        nioSocketChannel.pipeline().addLast(new StringDecoder());
-                        nioSocketChannel.pipeline().addLast(new SimpleChannelInboundHandler<String>() {
-                            @Override
-                            protected void channelRead0(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
-                                System.out.println(s);
-                            }
-                        });
+                    protected void initChannel(SocketChannel socketChannel) throws Exception {
+                        socketChannel.pipeline().addLast(new ServerHandler());
                     }
-                })
-                .bind(6000);
+                });
+        serverBootstrap.bind(6000);
+
     }
 
 }
