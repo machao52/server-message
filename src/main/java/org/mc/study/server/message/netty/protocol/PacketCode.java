@@ -7,8 +7,7 @@ import org.mc.study.server.message.netty.serialize.Serializer;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mc.study.server.message.netty.protocol.Command.LOGIN_REQUEST;
-import static org.mc.study.server.message.netty.protocol.Command.LOGIN_RESPONSE;
+import static org.mc.study.server.message.netty.protocol.Command.*;
 
 /**
  * @author machao
@@ -27,6 +26,8 @@ public class PacketCode {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
     }
 
     public ByteBuf encode(ByteBufAllocator byteBufAllocator, Packet packet) {

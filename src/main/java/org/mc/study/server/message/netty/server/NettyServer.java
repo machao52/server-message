@@ -1,4 +1,4 @@
-package org.mc.study.server.message.netty;
+package org.mc.study.server.message.netty.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;

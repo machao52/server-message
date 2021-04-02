@@ -10,6 +10,9 @@ public interface Command {
 
     byte LOGIN_RESPONSE = 2;
 
+    byte MESSAGE_REQUEST = 3;
+
+    byte MESSAGE_RESPONSE = 4;
 
 
 }

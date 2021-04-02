@@ -1,13 +1,12 @@
-package org.mc.study.server.message.netty;
+package org.mc.study.server.message.netty.server;
 
 import com.alibaba.fastjson.JSON;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import org.mc.study.server.message.netty.protocol.LoginRequestPacket;
-import org.mc.study.server.message.netty.protocol.LoginResponsePacket;
-import org.mc.study.server.message.netty.protocol.Packet;
-import org.mc.study.server.message.netty.protocol.PacketCode;
+import org.mc.study.server.message.netty.protocol.*;
+
+import java.util.Date;
 
 /**
  * @author machao
@@ -28,6 +27,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 loginResponsePacket.setSuccess(true);
             }
             ByteBuf buffer = PacketCode.INSTANCE.encode(ctx.alloc(), loginResponsePacket);
+            ctx.channel().writeAndFlush(buffer);
+        } else if (packet instanceof MessageRequestPacket) {
+            MessageRequestPacket messageRequestPacket = (MessageRequestPacket) packet;
+            System.out.println(new Date() + "客户端收到消息：" + messageRequestPacket.getMessage());
+            MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
+            messageResponsePacket.setMessage("客户端回复[" + messageRequestPacket.getMessage() + "]");
+            ByteBuf buffer = PacketCode.INSTANCE.encode(ctx.alloc(), messageResponsePacket);
             ctx.channel().writeAndFlush(buffer);
         }
     }
