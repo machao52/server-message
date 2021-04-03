@@ -9,8 +9,11 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.mc.study.server.message.netty.handler.PacketDecode;
+import org.mc.study.server.message.netty.handler.PacketEncode;
 import org.mc.study.server.message.netty.protocol.MessageRequestPacket;
 import org.mc.study.server.message.netty.protocol.PacketCode;
+import org.mc.study.server.message.netty.server.LoginRequestHandler;
 import org.mc.study.server.message.netty.utils.LoginUtil;
 
 import java.util.Date;
@@ -33,13 +36,16 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        socketChannel.pipeline().addLast(new ClientHandler());
+                        socketChannel.pipeline().addLast(new PacketDecode());
+                        socketChannel.pipeline().addLast(new LoginResponseHandler());
+                        socketChannel.pipeline().addLast(new MessageResponseHandler());
+                        socketChannel.pipeline().addLast(new PacketEncode());
                     }
                 });
 
         bootstrap.connect("localhost", 6000).addListener(future -> {
             if (future.isSuccess()) {
-                System.out.println(new Date()+"：连接成功，启动控制台线程。。。");
+                System.out.println(new Date() + "：连接成功，启动控制台线程。。。");
                 Channel channel = ((ChannelFuture) future).channel();
                 startConsoleThread(channel);
             }
@@ -55,7 +61,7 @@ public class NettyClient {
                     String line = scanner.nextLine();
                     MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
                     messageRequestPacket.setMessage(line);
-                    ByteBuf byteBuf = PacketCode.INSTANCE.encode(channel.alloc(), messageRequestPacket);
+                    ByteBuf byteBuf = PacketCode.INSTANCE.encode(channel.alloc().ioBuffer(), messageRequestPacket);
                     channel.writeAndFlush(byteBuf);
                 }
             }

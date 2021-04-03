@@ -4,7 +4,6 @@ package org.mc.study.server.message.netty.serialize.impl;
 import com.alibaba.fastjson.JSON;
 import org.mc.study.server.message.netty.serialize.Serializer;
 import org.mc.study.server.message.netty.serialize.SerializerAlgorithm;
-import org.springframework.stereotype.Service;
 
 /**
  * @author machao

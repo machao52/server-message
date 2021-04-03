@@ -30,10 +30,7 @@ public class PacketCode {
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
     }
 
-    public ByteBuf encode(ByteBufAllocator byteBufAllocator, Packet packet) {
-
-        //创建buffer对象
-        ByteBuf byteBuf = byteBufAllocator.ioBuffer();
+    public ByteBuf encode(ByteBuf byteBuf, Packet packet) {
 
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
