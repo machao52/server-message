@@ -59,10 +59,13 @@ public class NettyClient {
                     System.out.println("输入消息发送至服务端：");
                     Scanner scanner = new Scanner(System.in);
                     String line = scanner.nextLine();
-                    MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
-                    messageRequestPacket.setMessage(line);
-                    ByteBuf byteBuf = PacketCode.INSTANCE.encode(channel.alloc().ioBuffer(), messageRequestPacket);
-                    channel.writeAndFlush(byteBuf);
+                    for (int i = 0; i < 1000; i++) {
+                        MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
+                        messageRequestPacket.setMessage(line);
+                        ByteBuf byteBuf = PacketCode.INSTANCE.encode(channel.alloc().ioBuffer(), messageRequestPacket);
+                        channel.writeAndFlush(byteBuf);
+                    }
+
                 }
             }
         }).start();
