@@ -14,7 +14,7 @@ import org.mc.study.server.message.netty.protocol.PacketCode;
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket loginRequestPacket) throws Exception {
-        System.out.println(loginRequestPacket.getUserId()+loginRequestPacket.getUsername()+loginRequestPacket.getPassword());
+        //System.out.println(loginRequestPacket.getUserId()+loginRequestPacket.getUsername()+loginRequestPacket.getPassword());
         LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
         if (valid()) {
             System.out.println(loginRequestPacket.getUsername() + "登陆成功！");
