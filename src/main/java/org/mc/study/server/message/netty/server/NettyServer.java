@@ -35,9 +35,9 @@ public class NettyServer {
                     @Override
                     protected void initChannel(NioSocketChannel socketChannel) throws Exception {
                         socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
-                        socketChannel.pipeline().addLast(new LifeCycleTestHandler());
                         socketChannel.pipeline().addLast(new PacketDecode());
                         socketChannel.pipeline().addLast(new LoginRequestHandler());
+                        socketChannel.pipeline().addLast(new AuthHandler());
                         socketChannel.pipeline().addLast(new MessageRequestHandler());
                         socketChannel.pipeline().addLast(new PacketEncode());
                     }

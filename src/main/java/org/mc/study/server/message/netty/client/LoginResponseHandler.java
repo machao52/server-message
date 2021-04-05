@@ -31,4 +31,9 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
             LoginUtil.markAsLogin(ctx.channel());
         }
     }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("客户端连接被关闭");
+    }
 }
