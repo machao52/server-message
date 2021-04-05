@@ -1,11 +1,14 @@
 package org.mc.study.server.message.netty.server;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.mc.study.server.message.netty.protocol.MessageRequestPacket;
 import org.mc.study.server.message.netty.protocol.MessageResponsePacket;
 import org.mc.study.server.message.netty.protocol.PacketCode;
+import org.mc.study.server.message.netty.session.Session;
+import org.mc.study.server.message.netty.utils.SessionUtil;
 
 import java.util.Date;
 
@@ -15,10 +18,26 @@ import java.util.Date;
  */
 public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRequestPacket> {
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, MessageRequestPacket messageRequestPacket) throws Exception {
-        System.out.println(new Date() + "客户端收到消息：" + messageRequestPacket.getMessage());
+    protected void channelRead0(ChannelHandlerContext ctx, MessageRequestPacket messageRequestPacket) {
+
+        //1、拿到发送方的会话信息
+        Session session = SessionUtil.getSession(ctx.channel());
+
+        //2、通过消息发送方的会话消息构造要发送的消息
         MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
-        messageResponsePacket.setMessage("客户端回复[" + messageRequestPacket.getMessage() + "]");
-        ctx.channel().writeAndFlush(messageResponsePacket);
+        messageResponsePacket.setFromUserId(session.getUserId());
+        messageResponsePacket.setFromUsername(session.getUsername());
+        messageResponsePacket.setMessage(messageRequestPacket.getMessage());
+
+        //3、拿到消息接收方的channel
+        Channel toUserChannel = SessionUtil.getChannel(messageRequestPacket.getToUserId());
+
+        //4、将消息发送给接收方
+        if (toUserChannel != null && SessionUtil.hasLogin(toUserChannel)) {
+            toUserChannel.writeAndFlush(messageResponsePacket);
+        } else {
+            System.out.println("[" + messageRequestPacket.getToUserId() + "] 不在线，发送失败!");
+        }
+
     }
 }

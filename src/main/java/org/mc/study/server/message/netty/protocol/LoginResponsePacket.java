@@ -12,6 +12,10 @@ import static org.mc.study.server.message.netty.protocol.Command.LOGIN_RESPONSE;
 @Data
 public class LoginResponsePacket extends Packet {
 
+    private String userId;
+
+    private String username;
+
     private boolean success;
 
     private String reason;

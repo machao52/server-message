@@ -4,9 +4,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.mc.study.server.message.netty.protocol.LoginRequestPacket;
 import org.mc.study.server.message.netty.protocol.LoginResponsePacket;
-import org.mc.study.server.message.netty.protocol.MessageRequestPacket;
-import org.mc.study.server.message.netty.protocol.Packet;
-import org.mc.study.server.message.netty.utils.LoginUtil;
+import org.mc.study.server.message.netty.session.Session;
+import org.mc.study.server.message.netty.utils.SessionUtil;
 
 /**
  * @author machao
@@ -15,20 +14,14 @@ import org.mc.study.server.message.netty.utils.LoginUtil;
 public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginResponsePacket> {
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("客户端连接成功，开始登陆。。。");
-        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-        loginRequestPacket.setUserId("A888999");
-        loginRequestPacket.setUsername("machao");
-        loginRequestPacket.setPassword("123456");
-        ctx.channel().writeAndFlush(loginRequestPacket);
-    }
-
-    @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginResponsePacket loginResponsePacket) throws Exception {
+        String userId = loginResponsePacket.getUserId();
+        String username = loginResponsePacket.getUsername();
         if (loginResponsePacket.isSuccess()) {
-            System.out.println("客户端登录成功！");
-            LoginUtil.markAsLogin(ctx.channel());
+            SessionUtil.bindSession(new Session(userId, username), ctx.channel());
+            System.out.println("[" + username + "] 登录成功，userId为：" + userId);
+        } else {
+            System.out.println("[" + username + "] 登录失败，原因为：" + loginResponsePacket.getReason());
         }
     }
 

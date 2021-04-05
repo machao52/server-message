@@ -1,6 +1,7 @@
 package org.mc.study.server.message.netty.attribute;
 
 import io.netty.util.AttributeKey;
+import org.mc.study.server.message.netty.session.Session;
 
 /**
  * @author machao
@@ -8,6 +9,6 @@ import io.netty.util.AttributeKey;
  */
 public interface Attributes {
 
-    AttributeKey<Boolean> LOGIN = AttributeKey.newInstance("login");
+    AttributeKey<Session> SESSION = AttributeKey.newInstance("session");
 
 }

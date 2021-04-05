@@ -12,6 +12,10 @@ import static org.mc.study.server.message.netty.protocol.Command.MESSAGE_RESPONS
 @Data
 public class MessageResponsePacket extends Packet {
 
+    private String fromUserId;
+
+    private String fromUsername;
+
     private String message;
 
     @Override
