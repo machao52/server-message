@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.mc.study.server.message.netty.protocol.LoginRequestPacket;
 import org.mc.study.server.message.netty.protocol.LoginResponsePacket;
+import org.mc.study.server.message.netty.protocol.MessageRequestPacket;
 import org.mc.study.server.message.netty.protocol.Packet;
 import org.mc.study.server.message.netty.utils.LoginUtil;
 
@@ -20,7 +21,6 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
         loginRequestPacket.setUserId("A888999");
         loginRequestPacket.setUsername("machao");
         loginRequestPacket.setPassword("123456");
-
         ctx.channel().writeAndFlush(loginRequestPacket);
     }
 

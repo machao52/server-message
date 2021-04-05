@@ -9,6 +9,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.mc.study.server.message.netty.handler.PacketDecode;
 import org.mc.study.server.message.netty.handler.PacketEncode;
 import org.mc.study.server.message.netty.protocol.MessageRequestPacket;
@@ -36,6 +37,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
+                        socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
                         socketChannel.pipeline().addLast(new PacketDecode());
                         socketChannel.pipeline().addLast(new LoginResponseHandler());
                         socketChannel.pipeline().addLast(new MessageResponseHandler());
@@ -61,8 +63,7 @@ public class NettyClient {
                     String line = scanner.nextLine();
                     MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
                     messageRequestPacket.setMessage(line);
-                    ByteBuf byteBuf = PacketCode.INSTANCE.encode(channel.alloc().ioBuffer(), messageRequestPacket);
-                    channel.writeAndFlush(byteBuf);
+                    channel.writeAndFlush(messageRequestPacket);
                 }
             }
         }).start();

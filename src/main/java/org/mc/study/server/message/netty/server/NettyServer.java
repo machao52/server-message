@@ -5,6 +5,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.mc.study.server.message.netty.handler.PacketDecode;
 import org.mc.study.server.message.netty.handler.PacketEncode;
 
@@ -26,6 +27,7 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
+                        socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
                         socketChannel.pipeline().addLast(new PacketDecode());
                         socketChannel.pipeline().addLast(new LoginRequestHandler());
                         socketChannel.pipeline().addLast(new MessageRequestHandler());
