@@ -41,6 +41,9 @@ public class NettyServer {
                         socketChannel.pipeline().addLast(new AuthHandler());
                         socketChannel.pipeline().addLast(new MessageRequestHandler());
                         socketChannel.pipeline().addLast(new CreateGroupRequestHandler());
+                        socketChannel.pipeline().addLast(new JoinGroupRequestHandler());
+                        socketChannel.pipeline().addLast(new QuitGroupRequestHandler());
+                        socketChannel.pipeline().addLast(new ListGroupMembersRequestHandler());
                         socketChannel.pipeline().addLast(new PacketEncode());
                     }
                 });
