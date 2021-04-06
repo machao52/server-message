@@ -10,6 +10,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.mc.study.server.message.netty.handler.LifeCycleTestHandler;
 import org.mc.study.server.message.netty.handler.PacketDecode;
 import org.mc.study.server.message.netty.handler.PacketEncode;
+import org.mc.study.server.message.netty.protocol.CreateGroupResponsePacket;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -39,6 +40,7 @@ public class NettyServer {
                         socketChannel.pipeline().addLast(new LoginRequestHandler());
                         socketChannel.pipeline().addLast(new AuthHandler());
                         socketChannel.pipeline().addLast(new MessageRequestHandler());
+                        socketChannel.pipeline().addLast(new CreateGroupRequestHandler());
                         socketChannel.pipeline().addLast(new PacketEncode());
                     }
                 });
