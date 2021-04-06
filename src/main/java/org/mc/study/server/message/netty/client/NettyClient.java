@@ -58,7 +58,7 @@ public class NettyClient {
         new Thread(() -> {
             while (!Thread.interrupted()) {
                 if (!SessionUtil.hasLogin(channel)) {
-                    System.out.println("输入用户名登录：");
+                    System.out.print("输入用户名登录：");
                     String username = scanner.nextLine();
                     loginRequestPacket.setUsername(username);
                     loginRequestPacket.setPassword("pwd");

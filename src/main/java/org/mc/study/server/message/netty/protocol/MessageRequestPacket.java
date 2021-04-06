@@ -11,12 +11,17 @@ import static org.mc.study.server.message.netty.protocol.Command.MESSAGE_REQUEST
  */
 
 @Data
-@NoArgsConstructor
 public class MessageRequestPacket extends Packet {
 
     private String toUserId;
 
     private String message;
+
+    /**
+     * 必须要有这无参构造函数
+     */
+    public MessageRequestPacket() {
+    }
 
     public MessageRequestPacket(String toUserId, String message) {
         this.toUserId = toUserId;
