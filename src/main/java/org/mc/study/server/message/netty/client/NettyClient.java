@@ -12,6 +12,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.apache.kafka.common.security.auth.Login;
 import org.mc.study.server.message.netty.handler.PacketDecode;
 import org.mc.study.server.message.netty.handler.PacketEncode;
+import org.mc.study.server.message.netty.handler.Splitter;
 import org.mc.study.server.message.netty.protocol.LoginRequestPacket;
 import org.mc.study.server.message.netty.protocol.MessageRequestPacket;
 import org.mc.study.server.message.netty.utils.SessionUtil;
@@ -36,7 +37,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
+                        socketChannel.pipeline().addLast(new Splitter());
                         socketChannel.pipeline().addLast(new PacketDecode());
                         socketChannel.pipeline().addLast(new LoginResponseHandler());
                         socketChannel.pipeline().addLast(new MessageResponseHandler());
@@ -44,6 +45,7 @@ public class NettyClient {
                         socketChannel.pipeline().addLast(new JoinGroupResponseHandler());
                         socketChannel.pipeline().addLast(new QuitGroupResponseHandler());
                         socketChannel.pipeline().addLast(new ListGroupMembersResponseHandler());
+                        socketChannel.pipeline().addLast(new GroupMessageResponseHandler());
                         socketChannel.pipeline().addLast(new PacketEncode());
                     }
                 });

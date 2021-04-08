@@ -10,6 +10,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.mc.study.server.message.netty.handler.LifeCycleTestHandler;
 import org.mc.study.server.message.netty.handler.PacketDecode;
 import org.mc.study.server.message.netty.handler.PacketEncode;
+import org.mc.study.server.message.netty.handler.Splitter;
 import org.mc.study.server.message.netty.protocol.CreateGroupResponsePacket;
 
 import java.util.concurrent.Executors;
@@ -35,16 +36,11 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel socketChannel) throws Exception {
-                        socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
-                        socketChannel.pipeline().addLast(new PacketDecode());
-                        socketChannel.pipeline().addLast(new LoginRequestHandler());
-                        socketChannel.pipeline().addLast(new AuthHandler());
-                        socketChannel.pipeline().addLast(new MessageRequestHandler());
-                        socketChannel.pipeline().addLast(new CreateGroupRequestHandler());
-                        socketChannel.pipeline().addLast(new JoinGroupRequestHandler());
-                        socketChannel.pipeline().addLast(new QuitGroupRequestHandler());
-                        socketChannel.pipeline().addLast(new ListGroupMembersRequestHandler());
-                        socketChannel.pipeline().addLast(new PacketEncode());
+                        socketChannel.pipeline().addLast(new Splitter());
+                        socketChannel.pipeline().addLast(PacketCodeHandler.INSTANCE);
+                        socketChannel.pipeline().addLast(LoginRequestHandler.INSTANCE);
+                        socketChannel.pipeline().addLast(AuthHandler.INSTANCE);
+                        socketChannel.pipeline().addLast(IMHandler.INSTANCE);
                     }
                 });
         serverBootstrap.bind(6000).addListener(future -> {

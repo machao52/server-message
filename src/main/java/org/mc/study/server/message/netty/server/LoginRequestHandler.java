@@ -1,5 +1,6 @@
 package org.mc.study.server.message.netty.server;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.mc.study.server.message.netty.protocol.LoginRequestPacket;
@@ -14,7 +15,15 @@ import java.util.UUID;
  * @author machao
  * @date 2021/4/3
  */
+
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
+
+    private LoginRequestHandler() {
+
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket loginRequestPacket) throws Exception {

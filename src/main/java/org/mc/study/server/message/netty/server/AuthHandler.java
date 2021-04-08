@@ -1,5 +1,6 @@
 package org.mc.study.server.message.netty.server;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.mc.study.server.message.netty.utils.SessionUtil;
@@ -8,13 +9,21 @@ import org.mc.study.server.message.netty.utils.SessionUtil;
  * @author machao
  * @date 2021/4/5
  */
+
+@ChannelHandler.Sharable
 public class AuthHandler extends ChannelInboundHandlerAdapter {
+
+    public static final AuthHandler INSTANCE = new AuthHandler();
+
+    private AuthHandler(){
+
+    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (!SessionUtil.hasLogin(ctx.channel())) {
             ctx.channel().close();
-        }else{
+        } else {
             ctx.pipeline().remove(this);
             super.channelRead(ctx, msg);
         }
@@ -22,9 +31,9 @@ public class AuthHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        if(SessionUtil.hasLogin(ctx.channel())){
+        if (SessionUtil.hasLogin(ctx.channel())) {
             System.out.println("当前连接登录验证完毕，无需再次验证，AuthHandler已移除");
-        }else{
+        } else {
             System.out.println("无登录验证，强制关闭连接");
         }
     }
