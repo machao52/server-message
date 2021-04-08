@@ -37,6 +37,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
+                        socketChannel.pipeline().addLast(new IMIdleStatehandler());
                         socketChannel.pipeline().addLast(new Splitter());
                         socketChannel.pipeline().addLast(new PacketDecode());
                         socketChannel.pipeline().addLast(new LoginResponseHandler());
@@ -47,6 +48,7 @@ public class NettyClient {
                         socketChannel.pipeline().addLast(new ListGroupMembersResponseHandler());
                         socketChannel.pipeline().addLast(new GroupMessageResponseHandler());
                         socketChannel.pipeline().addLast(new PacketEncode());
+                        socketChannel.pipeline().addLast(new HeartbeatTimeHandler());
                     }
                 });
 

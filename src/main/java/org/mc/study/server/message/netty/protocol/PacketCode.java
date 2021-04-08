@@ -40,6 +40,8 @@ public class PacketCode {
         packetTypeMap.put(LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
         packetTypeMap.put(GROUP_MESSAGE_REQUEST, GroupMessageRequestPacket.class);
         packetTypeMap.put(GROUP_MESSAGE_RESPONSE, GroupMessageResponsePacket.class);
+        packetTypeMap.put(HEARTBEAT_REQUEST, HeartbeatRequestPacket.class);
+        packetTypeMap.put(HEARTBEAT_RESPONSE, HeartbeatResponsePacket.class);
     }
 
     public ByteBuf encode(ByteBuf byteBuf, Packet packet) {
